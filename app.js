@@ -6,7 +6,7 @@ const pool = mysql.createPool({
   host: "localhost",
   user: "sbsst",
   password: "sbs123414",
-  database: "a9",
+  database: "wise_saying_app_2022_05_26",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -34,6 +34,15 @@ app.get(`/wise-sayings/random`,async(req,res)=>{
     });
     return res;
   }
+  wiseSayingsRows.hitCount++;
+  await pool.query(
+    `
+    UPDATE wise_saying
+    SET hitCount = ?
+    WHERE id = ?
+    `,
+    [wiseSayingsRows.hitCount, wiseSayingsRows.id]
+  );
   res.json({
     resultCode:"S-1",
     msg:"성공",
